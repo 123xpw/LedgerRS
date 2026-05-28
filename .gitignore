@@ -27,3 +27,10 @@ Thumbs.db
 
 # AI assistant context
 .claude/
+
+# Private project documents
+*.pdf
+需求文档*
+api.md
+design.md
+test-report.md
