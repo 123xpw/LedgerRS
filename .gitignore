@@ -29,8 +29,4 @@ Thumbs.db
 .claude/
 
 # Private project documents
-*.pdf
-REQUIREMENTS.md
-api.md
-design.md
-test-report.md
+/docs/
