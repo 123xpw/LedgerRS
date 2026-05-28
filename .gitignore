@@ -30,7 +30,7 @@ Thumbs.db
 
 # Private project documents
 *.pdf
-需求文档*
+REQUIREMENTS.md
 api.md
 design.md
 test-report.md
