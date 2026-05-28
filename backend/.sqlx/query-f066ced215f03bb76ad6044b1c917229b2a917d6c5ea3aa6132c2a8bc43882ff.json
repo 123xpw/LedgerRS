@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT er.id, er.base_currency, er.quote_currency, er.rate, er.date, er.created_at\n               FROM exchange_rates er\n               INNER JOIN (\n                   SELECT quote_currency, MAX(date) AS max_date\n                   FROM exchange_rates\n                   WHERE base_currency = $1\n                   GROUP BY quote_currency\n               ) latest ON latest.quote_currency = er.quote_currency\n                        AND latest.max_date = er.date\n               WHERE er.base_currency = $1\n               ORDER BY er.quote_currency ASC",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "base_currency",
+        "type_info": "Bpchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "quote_currency",
+        "type_info": "Bpchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "rate",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 4,
+        "name": "date",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 5,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Bpchar"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "f066ced215f03bb76ad6044b1c917229b2a917d6c5ea3aa6132c2a8bc43882ff"
+}

@@ -1,0 +1,59 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE budgets SET amount = $2, updated_at = NOW()\n             WHERE id = $1\n             RETURNING id, ledger_id, category_id, period, amount, created_at, updated_at",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "ledger_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "category_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 3,
+        "name": "period",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "amount",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 5,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 6,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Numeric"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "ebac43d3337e29520ae5f431b4c909d204470e08de4f944a46b91366d5992e60"
+}

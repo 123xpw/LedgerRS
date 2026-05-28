@@ -1,0 +1,109 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE transactions SET\n                category_id  = CASE WHEN $2 THEN $3 ELSE category_id END,\n                note         = CASE WHEN $4 THEN $5 ELSE note END,\n                occurred_at  = COALESCE($6, occurred_at),\n                custom_rate  = CASE WHEN $7 THEN $8 ELSE custom_rate END,\n                base_amount  = COALESCE($9, base_amount),\n                applied_rate = COALESCE($10, applied_rate),\n                updated_at   = NOW()\n               WHERE id = $1\n               RETURNING id, ledger_id,\n                         type AS transaction_type,\n                         amount, currency, base_amount, applied_rate,\n                         category_id, note, occurred_at, custom_rate,\n                         transfer_pair_id, created_at, updated_at",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "ledger_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "transaction_type",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "amount",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 4,
+        "name": "currency",
+        "type_info": "Bpchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "base_amount",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 6,
+        "name": "applied_rate",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 7,
+        "name": "category_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 8,
+        "name": "note",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 9,
+        "name": "occurred_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 10,
+        "name": "custom_rate",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 11,
+        "name": "transfer_pair_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 12,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 13,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Bool",
+        "Uuid",
+        "Bool",
+        "Text",
+        "Timestamptz",
+        "Bool",
+        "Numeric",
+        "Numeric",
+        "Numeric"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "f4ebda06e703e3cfa0e3678197e3523dffaf4483cd4ad46f0df0553a3cb9879f"
+}

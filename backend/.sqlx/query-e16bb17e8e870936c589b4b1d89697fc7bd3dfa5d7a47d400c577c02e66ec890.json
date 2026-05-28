@@ -1,0 +1,42 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT\n                t.category_id           AS \"category_id?: Uuid\",\n                c.name                  AS \"category_name?: String\",\n                SUM(t.base_amount)      AS \"total!: Decimal\",\n                COUNT(*)                AS \"count!\"\n               FROM transactions t\n               LEFT JOIN categories c ON c.id = t.category_id\n               WHERE t.ledger_id = $1\n                 AND t.type = 'expense'\n                 AND date_trunc('month', t.occurred_at AT TIME ZONE $2) =\n                     date_trunc('month', NOW() AT TIME ZONE $2)\n               GROUP BY t.category_id, c.name\n               ORDER BY \"total!: Decimal\" DESC\n               LIMIT $3",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "category_id?: Uuid",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "category_name?: String",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "total!: Decimal",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 3,
+        "name": "count!",
+        "type_info": "Int8"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      true,
+      false,
+      null,
+      null
+    ]
+  },
+  "hash": "e16bb17e8e870936c589b4b1d89697fc7bd3dfa5d7a47d400c577c02e66ec890"
+}

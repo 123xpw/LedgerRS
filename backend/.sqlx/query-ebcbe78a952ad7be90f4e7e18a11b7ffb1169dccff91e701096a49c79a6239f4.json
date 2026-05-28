@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM transaction_tags WHERE transaction_id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ebcbe78a952ad7be90f4e7e18a11b7ffb1169dccff91e701096a49c79a6239f4"
+}

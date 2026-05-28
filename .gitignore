@@ -1,0 +1,29 @@
+# Rust build artifacts
+/target/
+**/target/
+
+# Environment variables (contains credentials — never commit)
+.env
+.env.local
+.env.*.local
+
+# Frontend build output
+/frontend/dist/
+/ui/dist/
+/ui/node_modules/
+
+# Logs
+*.log
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# AI assistant context
+.claude/

@@ -1,0 +1,13 @@
+[workspace]
+members  = ["backend", "frontend", "shared"]
+# `cargo build` builds backend + shared by default; frontend uses `trunk build`
+default-members = ["backend", "shared"]
+resolver = "2"
+
+[workspace.dependencies]
+serde        = { version = "1", features = ["derive"] }
+uuid         = { version = "1", features = ["v4", "serde"] }
+chrono       = { version = "0.4", features = ["serde"] }
+rust_decimal = { version = "1", features = ["serde"] }
+thiserror    = "1"
+tracing      = "0.1"

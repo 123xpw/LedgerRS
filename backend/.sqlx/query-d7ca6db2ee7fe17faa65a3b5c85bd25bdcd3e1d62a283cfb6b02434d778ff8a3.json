@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT COALESCE(MAX(sort_order), 0) AS max_order\n             FROM categories\n             WHERE ledger_id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "max_order",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "d7ca6db2ee7fe17faa65a3b5c85bd25bdcd3e1d62a283cfb6b02434d778ff8a3"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "LegerRS UI Integration",
+  "description": "Premium multi-currency personal finance ledger and bookkeeping utility designed with a pixel-perfect, minimalist user interface utilizing the custom LegerRS brand logo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

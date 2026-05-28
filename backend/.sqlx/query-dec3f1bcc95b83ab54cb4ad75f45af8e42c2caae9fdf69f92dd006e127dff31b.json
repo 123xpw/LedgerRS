@@ -1,0 +1,130 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT\n                t.id, t.ledger_id,\n                t.type AS transaction_type,\n                t.amount, t.currency, t.base_amount, t.applied_rate,\n                t.category_id, t.note, t.occurred_at,\n                t.custom_rate, t.transfer_pair_id, t.created_at, t.updated_at,\n                c.name     AS \"cat_name: Option<String>\",\n                c.type     AS \"cat_type: Option<String>\",\n                peer.ledger_id  AS \"peer_ledger_id: Option<Uuid>\",\n                peer.amount     AS \"peer_amount: Option<Decimal>\",\n                peer.currency   AS \"peer_currency: Option<String>\"\n            FROM transactions t\n            LEFT JOIN categories c ON c.id = t.category_id\n            LEFT JOIN transactions peer\n                ON peer.transfer_pair_id = t.transfer_pair_id\n                AND peer.id <> t.id\n                AND t.transfer_pair_id IS NOT NULL\n            WHERE t.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "ledger_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "transaction_type",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "amount",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 4,
+        "name": "currency",
+        "type_info": "Bpchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "base_amount",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 6,
+        "name": "applied_rate",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 7,
+        "name": "category_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 8,
+        "name": "note",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 9,
+        "name": "occurred_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 10,
+        "name": "custom_rate",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 11,
+        "name": "transfer_pair_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 12,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 13,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 14,
+        "name": "cat_name: Option<String>",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 15,
+        "name": "cat_type: Option<String>",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 16,
+        "name": "peer_ledger_id: Option<Uuid>",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 17,
+        "name": "peer_amount: Option<Decimal>",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 18,
+        "name": "peer_currency: Option<String>",
+        "type_info": "Bpchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "dec3f1bcc95b83ab54cb4ad75f45af8e42c2caae9fdf69f92dd006e127dff31b"
+}

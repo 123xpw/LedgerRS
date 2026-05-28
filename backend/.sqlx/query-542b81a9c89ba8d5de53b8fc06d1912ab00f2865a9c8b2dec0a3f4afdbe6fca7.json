@@ -1,0 +1,89 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            WITH tx_agg AS (\n                SELECT\n                    SUM(CASE WHEN type = 'income'  THEN base_amount ELSE 0 END) AS total_income,\n                    SUM(CASE WHEN type = 'expense' THEN base_amount ELSE 0 END) AS total_expense,\n                    SUM(CASE WHEN type = 'income'\n                              AND date_trunc('month', occurred_at AT TIME ZONE $2) =\n                                  date_trunc('month', NOW() AT TIME ZONE $2)\n                              THEN base_amount ELSE 0 END) AS month_income,\n                    SUM(CASE WHEN type = 'expense'\n                              AND date_trunc('month', occurred_at AT TIME ZONE $2) =\n                                  date_trunc('month', NOW() AT TIME ZONE $2)\n                              THEN base_amount ELSE 0 END) AS month_expense\n                FROM transactions\n                WHERE ledger_id = $1 AND type IN ('income', 'expense')\n            ),\n            budget_agg AS (\n                SELECT SUM(amount) AS budget_total\n                FROM budgets\n                WHERE ledger_id = $1\n            )\n            SELECT\n                l.id,\n                l.user_id,\n                l.name,\n                l.icon,\n                l.base_currency,\n                l.initial_balance,\n                l.initial_balance\n                    + COALESCE(ta.total_income,  0)\n                    - COALESCE(ta.total_expense, 0) AS \"balance!: Decimal\",\n                COALESCE(ta.month_income,  0) AS \"this_month_income!: Decimal\",\n                COALESCE(ta.month_expense, 0) AS \"this_month_expense!: Decimal\",\n                ba.budget_total                AS \"budget_total?: Decimal\",\n                l.created_at,\n                l.updated_at\n            FROM ledgers l, tx_agg ta, budget_agg ba\n            WHERE l.id = $1\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "user_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "icon",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "base_currency",
+        "type_info": "Bpchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "initial_balance",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 6,
+        "name": "balance!: Decimal",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 7,
+        "name": "this_month_income!: Decimal",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 8,
+        "name": "this_month_expense!: Decimal",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 9,
+        "name": "budget_total?: Decimal",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 10,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 11,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      null,
+      null,
+      null,
+      null,
+      false,
+      false
+    ]
+  },
+  "hash": "542b81a9c89ba8d5de53b8fc06d1912ab00f2865a9c8b2dec0a3f4afdbe6fca7"
+}

@@ -1,0 +1,77 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "WITH period_bounds AS (\n                SELECT\n                    b.id,\n                    CASE b.period\n                        WHEN 'week'  THEN date_trunc('week',  NOW() AT TIME ZONE $2)::date\n                        WHEN 'month' THEN date_trunc('month', NOW() AT TIME ZONE $2)::date\n                        WHEN 'year'  THEN date_trunc('year',  NOW() AT TIME ZONE $2)::date\n                    END AS period_start,\n                    CASE b.period\n                        WHEN 'week'  THEN (date_trunc('week',  NOW() AT TIME ZONE $2) + INTERVAL '6 days')::date\n                        WHEN 'month' THEN (date_trunc('month', NOW() AT TIME ZONE $2) + INTERVAL '1 month' - INTERVAL '1 day')::date\n                        WHEN 'year'  THEN (date_trunc('year',  NOW() AT TIME ZONE $2) + INTERVAL '1 year'  - INTERVAL '1 day')::date\n                    END AS period_end\n                FROM budgets b\n                WHERE b.ledger_id = $1\n            ),\n            spend_agg AS (\n                SELECT\n                    b.id AS budget_id,\n                    COALESCE(SUM(t.base_amount), 0) AS spent\n                FROM budgets b\n                JOIN period_bounds pb ON pb.id = b.id\n                LEFT JOIN transactions t\n                    ON t.ledger_id = b.ledger_id\n                    AND t.type = 'expense'\n                    AND (b.category_id IS NULL OR t.category_id = b.category_id)\n                    AND (t.occurred_at AT TIME ZONE $2)::date >= pb.period_start\n                    AND (t.occurred_at AT TIME ZONE $2)::date <= pb.period_end\n                WHERE b.ledger_id = $1\n                GROUP BY b.id\n            )\n            SELECT\n                b.id,\n                b.ledger_id,\n                b.category_id,\n                b.period,\n                b.amount,\n                b.created_at,\n                b.updated_at,\n                sa.spent                        AS \"spent!: Decimal\",\n                pb.period_start                 AS \"period_start!: NaiveDate\",\n                pb.period_end                   AS \"period_end!: NaiveDate\"\n            FROM budgets b\n            JOIN period_bounds pb ON pb.id = b.id\n            JOIN spend_agg     sa ON sa.budget_id = b.id\n            WHERE b.ledger_id = $1\n            ORDER BY b.created_at ASC",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "ledger_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "category_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 3,
+        "name": "period",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "amount",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 5,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 6,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 7,
+        "name": "spent!: Decimal",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 8,
+        "name": "period_start!: NaiveDate",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 9,
+        "name": "period_end!: NaiveDate",
+        "type_info": "Date"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "4440deebbe1d19d0522a4251f1afc7e59506f38d7c01aed720e7ba515dba280e"
+}

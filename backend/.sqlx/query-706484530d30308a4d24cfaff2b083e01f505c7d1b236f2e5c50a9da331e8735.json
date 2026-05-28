@@ -1,0 +1,25 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO transactions\n                (id, ledger_id, type, amount, currency, base_amount, applied_rate,\n                 category_id, note, occurred_at, custom_rate, transfer_pair_id)\n               VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)\n               ON CONFLICT (id) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Varchar",
+        "Numeric",
+        "Bpchar",
+        "Numeric",
+        "Numeric",
+        "Uuid",
+        "Text",
+        "Timestamptz",
+        "Numeric",
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "706484530d30308a4d24cfaff2b083e01f505c7d1b236f2e5c50a9da331e8735"
+}

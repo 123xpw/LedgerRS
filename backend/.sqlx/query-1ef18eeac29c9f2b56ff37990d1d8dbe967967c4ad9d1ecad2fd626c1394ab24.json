@@ -1,0 +1,36 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT\n                to_char(date_trunc('month', occurred_at AT TIME ZONE $3), 'YYYY-MM') AS \"year_month!: String\",\n                COALESCE(SUM(CASE WHEN type = 'income'  THEN base_amount ELSE 0 END), 0) AS \"income!: Decimal\",\n                COALESCE(SUM(CASE WHEN type = 'expense' THEN base_amount ELSE 0 END), 0) AS \"expense!: Decimal\"\n               FROM transactions\n               WHERE ledger_id = $1\n                 AND type IN ('income', 'expense')\n                 AND occurred_at >= (date_trunc('month', NOW() AT TIME ZONE $3) - ($2 || ' months')::interval)\n               GROUP BY date_trunc('month', occurred_at AT TIME ZONE $3)\n               ORDER BY 1 ASC",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "year_month!: String",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "income!: Decimal",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 2,
+        "name": "expense!: Decimal",
+        "type_info": "Numeric"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": [
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "1ef18eeac29c9f2b56ff37990d1d8dbe967967c4ad9d1ecad2fd626c1394ab24"
+}

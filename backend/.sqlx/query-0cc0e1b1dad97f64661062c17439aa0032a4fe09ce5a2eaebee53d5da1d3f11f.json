@@ -1,0 +1,20 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT MAX(date) AS latest FROM exchange_rates",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "latest",
+        "type_info": "Date"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      null
+    ]
+  },
+  "hash": "0cc0e1b1dad97f64661062c17439aa0032a4fe09ce5a2eaebee53d5da1d3f11f"
+}

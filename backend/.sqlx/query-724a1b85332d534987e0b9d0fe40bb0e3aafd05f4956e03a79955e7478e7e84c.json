@@ -1,0 +1,22 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE users\n             SET failed_login_count = failed_login_count + 1, updated_at = NOW()\n             WHERE id = $1\n             RETURNING failed_login_count",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "failed_login_count",
+        "type_info": "Int2"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "724a1b85332d534987e0b9d0fe40bb0e3aafd05f4956e03a79955e7478e7e84c"
+}
